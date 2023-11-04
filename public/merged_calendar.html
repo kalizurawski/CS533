@@ -1,0 +1,175 @@
+<!-- Sources used
+https://stackoverflow.com/questions/49501083/make-elements-in-a-list-clickable-php
+https://stackoverflow.com/questions/23359372/connect-html-page-with-sql-server-using-javascript
+https://www.w3schools.com/php/php_ajax_database.asp
+-->
+
+
+<!DOCTYPE html>
+<head>
+<script>
+function showCalendar(str) {
+  if (str == "") {
+    document.getElementById("txtHint").innerHTML = "";
+    return;
+  } else {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("txtHint").innerHTML = this.responseText;
+      }
+    };
+    xmlhttp.open("GET","merged_calendar.php?q="+str,true);
+    xmlhttp.send();
+  }
+}
+</script>
+
+
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"> </script>
+<script type = "text/javascript">
+    // generate a function(!) that reacts to an image being clicked
+    function deleteData(id, platform){
+        // call server-side delete
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/deleteEvent/' + id + '/' + platform
+        });
+        showCalendar(document.getElementById("calendars").value);
+    }
+
+    function clearInputs() {
+        document.getElementById("nameInput").value = "";
+        document.getElementById("startDate").value = "";
+        document.getElementById("startInput").value = "";
+        document.getElementById("endDate").value = "";
+        document.getElementById("endInput").value = "";
+        document.getElementById("platformInput").value = "";
+    }
+
+    function editData(id, platform) {
+        console.log(id)
+        let name = 
+            document.getElementById("nameInput").value; 
+        let startDate = 
+            document.getElementById("startDate").value; 
+        let startTime = 
+            document.getElementById("startInput").value;
+        let endDate = 
+            document.getElementById("endDate").value;  
+        let endTime = 
+            document.getElementById("endInput").value;
+
+        let start = "undefined"
+        let end = "undefined"
+        let newName = "undefined"
+
+        if (name != "") {
+            newName = name
+        }
+
+        if (startTime != "") {
+            console.log("here")
+            start = startDate + "T" + startTime + ":00Z"
+        }
+
+        if (endTime != "") {
+            console.log(endTime)
+            end = endDate + "T" + endTime + ":00Z"
+        }
+
+
+        // call server-side add
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/editEvent/' + id + '/' + newName + '/' + start + '/' + end + '/'  + platform
+        });
+
+        clearInputs();
+        showCalendar(document.getElementById("calendars").value);
+    }
+    
+    // add data
+    function addData() { 
+        // Get input values 
+        let name = 
+            document.getElementById("nameInput").value; 
+        let startDate = 
+            document.getElementById("startDate").value; 
+        let startTime = 
+            document.getElementById("startInput").value;
+        let endDate = 
+            document.getElementById("endDate").value;  
+        let endTime = 
+            document.getElementById("endInput").value; 
+        let platform = 
+            document.getElementById("platformInput").value; 
+
+        // call server-side add
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/addEvent/' + name + '/' + startDate + "T" + startTime + '/' + endDate + "T" + endTime + '/'  + platform
+        });
+
+        // Clear input fields 
+        clearInputs();
+        
+        showCalendar(document.getElementById("calendars").value);
+    } 
+</script>
+
+<div id="formContainer"> 
+    <label for="nameInput"> 
+        Event Name: 
+    </label> 
+    <input type="text" 
+            id="nameInput" 
+            placeholder="Enter your event name"> 
+    <label for="startInput"> 
+        Start Time: 
+    </label> 
+    <input type="date"
+        id="startDate"
+        placeholder="Date"
+    >
+    <input type="time" 
+            id="startInput" 
+            placeholder="Enter your start time"> 
+    <label for="endInput"> 
+        End Time: 
+    </label>
+    <input type="date"
+        id="endDate"
+        placeholder="Date"
+    >
+    <input type="time" 
+            id="endInput" 
+            placeholder="Enter you end time"> 
+    <label for="platformInput"> 
+        Platform: 
+    </label> 
+    <input type="text" 
+                id="platformInput"
+                placeholder="Zoom or Teams">
+    </input> 
+    <button onclick="addData()"> 
+            Add 
+        </button> 
+</div>
+
+<form>
+<select id="calendars" onchange="showCalendar(this.value)">
+  <option value="">Select a calendar to view: </option>
+  <option value="1">All</option>
+  <option value="2">Zoom</option>
+  <option value="3">Teams</option>
+  </select>
+</form>
+<br>
+<div id="txtHint"><b>Calendar info will be shown here...</b></div>
+
+</body>
+</html>
