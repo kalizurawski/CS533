@@ -1,0 +1,1 @@
+This project requires that you set up your ssl certificate and private key in a folder called ssl.  Additionally, it requires you set up a config file to match the variables given for Zoom and Teams info.
