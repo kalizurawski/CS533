@@ -24,22 +24,21 @@ const app = express()
 
 // general info
 const port = 8080
-const ngrokAddress = "https://3b42-69-128-36-84.ngrok-free.app"
+const ngrokAddress = NGROK_ADDRESS
 
 // database info
 db_createDatabase()
 
 // zoom info
-const zoomOauthId = "7u_yDfLyTVeiorkmtEvNWw"
-const zoomOauthSecret = "GmJ5TuZVkI1YV67szPcYFnCfIyZNSmLJ"
-const ZOOM_WEBHOOK_SECRET_TOKEN = "_bdT1d5_Qw6g105a7AU7zw"
+const zoomOauthId = ZOOM_CLIENT_ID
+const zoomOauthSecret = ZOOM_CLIENT_SECRET
+const ZOOM_WEBHOOK_SECRET_TOKEN = ZOOM_WEBHOOK_SECRET
 
 
 // https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=f6b12cbe-8f66-4c55-96fb-b611577e992d&response_type=code&redirect_uri=https://922e-69-128-36-84.ngrok-free.app/oauth2/callback&scope=https://graph.microsoft.com/.default
 // teams info
-const teamsClientId = "f6b12cbe-8f66-4c55-96fb-b611577e992d"
-const tenantId = "f8cdef31-a31e-4b4a-93e4-5f571e91255a"
-const teamsClientSecret = "wG.8Q~XFPcmePMNPhL1Ye7VIZEJhpLaLK9qercSS"
+const teamsClientId = TEAMS_CLIENT_ID
+const tenantId = TENANT_ID
 const signInLinkTeams = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=' + teamsClientId + '&response_type=code&redirect_uri=https://localhost:' + port + '/oauth2/callback&scope=https://graph.microsoft.com/.default'
 const sslCertDirectory = __dirname + '/ssl'
 const sslOptions = {
